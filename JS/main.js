@@ -80,7 +80,7 @@ d3.json("../data/regions.geojson", function(error, data) {
       // .on("click", clicked)
     .style("fill", function(d) {
       if(d.properties.region === "Rhône") {
-        console.log(d.geometry.coordinates)
+        //console.log(d.geometry.coordinates)
         return "pink";
       } else if (d.properties.region === "Bordeaux") {
         return "#5F021F"
@@ -128,6 +128,27 @@ d3.json("../data/regions.geojson", function(error, data) {
     })
     .on("click", clicked)
     .text(function(d,i) { return labelRegion(d.properties.region); })
+
+
+    //Button Events Work in progress, only zooms to Bordeaux for now...
+    // d3.select("#bordeaux")
+    // .on("click", function() {
+    //   console.log("Bordeaux!" + data.features.region)
+
+    //   clicked(data)
+    // });
+    // d3.select("#loire")
+    // .on("click", function() {
+    //   console.  ("Loire!")
+    //   clicked(data)
+    // });
+    // d3.select("#languedoc")
+    // .on("click", function() {
+    //   console.log("Lang!")
+    //   clicked(data)
+    // });
+
+
 });
 
 /* 3 zoom levels
@@ -160,6 +181,8 @@ function clicked(d) {
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
       .style("stroke-width", 1.5 / k + "px");
 }
+
+
 
 //DATA TO INCLUDE
 //Regions: https://raw.githubusercontent.com/UCDavisLibrary/wine-ontology/master/examples/france/regions.geojson

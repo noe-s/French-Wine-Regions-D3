@@ -43,17 +43,18 @@
         <button class="w3-button w3-white w3-border w3-round-large" id="bordeaux">Bordeaux</button> 
         <button class="w3-button w3-white w3-border w3-round-large" id="loire">Loire Valley</button>
         <button class="w3-button w3-white w3-border w3-round-large" id="Languedoc">Languedoc-Roussillon</button> 
-            
-            <div id="chart"></div> 
+
             <h2 style="text-shadow:.5px .5px 0 #444">French Wine Regions</h2>
-            <div id="map_container">
-            </div>
+            <div id="map_container"></div>
     </div>
         <div class="w3-half w3-container w3-left-align">
         <h2 style="text-shadow:.5px .5px 0 #444">General Overview Heading</h2>
         <br>
         <br>
-        <h3 style="text-shadow:.5px .5px 0 #444" text-anchor="left">Adaptive Heading for region selected</h3>
+        <h3 id="region-header" style="text-shadow:.5px .5px 0 #444" text-anchor="left">Region Header Here</h3>
+        <div id="region-desc-text">
+            <p id="description" src=""></p>
+        </div>
         <!-- <div class="w3-left-align">
         <p>&nbsp &nbsp &nbsp &nbspThe statewide distribution of people from New York City incarcerated in the federal prison system reveals the arbitrary nature of the facility where people are assigned to. Of over 50,000 inmates under custody in 2015, 45.0% were indicted in NYC (DOCCS 2016). Since most people in the system are from urban areas and large prison facilities are located in rural areas, incarcerated people are often by necessity located hours from their support networks. This is detrimental to success upon release. The lack of patterns in the spatial distribution of people from NYC throughout the states reveals negligence in the allocation process, providing further support to criminal justice reform that seeks an alternative to prisons.</p>
         <p>&nbsp &nbsp &nbsp &nbspThe accompanying visualization is sized by the number of inmates from NYC in counties with facilities and colored by region. The "Split by Violent Crime" button moves counties where the majority of the facilties' population were convicted of violent crimes to the top. The crime committed is based off of the most serious crime in each individual’s sentence. Individual records of inmates under custody were retrieved from the NYS Department of Corrections and aggregated by geographic information to create the visual. While race was not an included variable, 48.8% of statewide prisoners at the time were Black and 24.1% were Hispanic (DOCCS 2016). The pie chart below displays where in NYC incarcerated people were indicted and the incarceration rate per 10,000 for each borough. It should be noted that the county of indictment is not necessarily the county in which a prisoner lived prior to incarceration. This may have caused Manhattan to be over-represented. </p>

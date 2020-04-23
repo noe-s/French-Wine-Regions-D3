@@ -1,9 +1,25 @@
-var width = 960,
+/* Wine region map
+Author: Noé Schultz
+Date started: 4/21/20
+
+
+Things to do:
+-Sub region zoom
+  - possible new zoom layer with on-hover and on-click functions
+  - outline grape varieties, label sub-regions (on-hover?)
+-Write wine text
+  -Write text outlining characteristics & history of various regions
+  -Change text value based on active region clicked.
+
+
+*/
+
+var width = 500,
 height = 500,
 centered;
 
 var projection = d3.geo.conicConformalFrance()
-  .translate([width / 2, height / 2]);
+  .translate([width, height/2]);
 
 var path = d3.geo.path()
   .projection(projection);
@@ -72,62 +88,63 @@ d3.json("../data/regions.geojson", function(error, data) {
   if(error) { throw error };
 
     g.append("g")
-    .attr("id", "wine-regions")
-    .selectAll("path")
-      .data(data.features)
-    .enter().append("path")
-      .attr("d", path)
-      // .on("click", clicked)
-    .style("fill", function(d) {
-      if(d.properties.region === "Rhône") {
-        //console.log(d.geometry.coordinates)
-        return "pink";
-      } else if (d.properties.region === "Bordeaux") {
-        return "#5F021F"
-      } else if(d.properties.region === "Champagne") {
-        return "F7E7CE"
-      } else if(d.properties.region === "Bourgogne") {
-        return "purple"
-      } else if(d.properties.region === "Languedoc-Roussillon") {
-        return "green"
-      } else if(d.properties.region === "Alsace") {
-        return "red"
-      } else if(d.properties.region === "Loire") {
-        return "#34eba8"
-      } else if(d.properties.region === "Provence") {
-        return "orange"
-      } else if(d.properties.region === "Dordogne") {
-        return "grey"
-      }
-    })
-    .style("stroke","#ffffff")
-    .style("stroke-width",".1px")
-    // .style("fill", "#")
+      .attr("id", "wine-regions")
+      .selectAll("path")
+        .data(data.features)
+      .enter().append("path")
+        .attr("d", path)
+        // .on("click", clicked)
+      .style("fill", function(d) {
+        if(d.properties.region === "Rhône") {
+          //console.log(d.geometry.coordinates)
+          return "pink";
+        } else if (d.properties.region === "Bordeaux") {
+          return "#5F021F"
+        } else if(d.properties.region === "Champagne") {
+          return "F7E7CE"
+        } else if(d.properties.region === "Bourgogne") {
+          return "purple"
+        } else if(d.properties.region === "Languedoc-Roussillon") {
+          return "green"
+        } else if(d.properties.region === "Alsace") {
+          return "red"
+        } else if(d.properties.region === "Loire") {
+          return "#34eba8"
+        } else if(d.properties.region === "Provence") {
+          return "orange"
+        } else if(d.properties.region === "Dordogne") {
+          return "grey"
+        }
+      })
+      .style("stroke","#ffffff")
+      .style("stroke-width",".1px");
+      // .style("fill", "#")
     g.append("path")
-    .datum(topojson.mesh(data, data.features, function(a, b) { return a !== b; }))
-    //.attr("id", "wine-regions")
-    .attr("id","wine-regions")
-    .attr("d", path)
+      .datum(topojson.mesh(data, data.features, function(a, b) { return a !== b; }))
+      //.attr("id", "wine-regions")
+      .attr("id","wine-regions")
+      .attr("d", path);
 
     g.selectAll(".region-labels")
-    .data(data.features)
-    .enter().append("text")
-    .attr("class","region-labels")
-    .attr("transform", function(d) { 
-      return "translate(" + projection(d.geometry.coordinates[0][0]) + ")"; })
-    .attr("dy",".35em")
-    .attr("font-size", "10px")
-    // .attr("stroke", "#ffffff")
-    // .attr("stroke-width",".05px")
-    .attr("text-anchor", function(d) {
-      if(labelRegion(d.properties.region === 'Languedoc-Roussillon')) {
-        return "end"
-      } else {
-        return "left"
-      }
-    })
-    .on("click", clicked)
-    .text(function(d,i) { return labelRegion(d.properties.region); })
+      .data(data.features)
+      .enter().append("text")
+      .attr("class","region-labels")
+      .attr("transform", function(d) { 
+        return "translate(" + projection(d.geometry.coordinates[0][0]) + ")"; })
+      .attr("dy",".35em")
+      .attr("font-size", "10px")
+      // .attr("stroke", "#ffffff")
+      // .attr("stroke-width",".05px")
+      .attr("text-anchor", function(d) {
+        if(labelRegion(d.properties.region === 'Languedoc-Roussillon')) {
+          return "end"
+        } else {
+          return "left"
+        }
+      })
+      .on("click", clicked)
+      .attr("onclick","loadText()")
+      .text(function(d,i) { return labelRegion(d.properties.region); });
 
 
     //Button Events Work in progress, only zooms to Bordeaux for now...
@@ -150,12 +167,6 @@ d3.json("../data/regions.geojson", function(error, data) {
 
 
 });
-
-/* 3 zoom levels
-  - France
-  - Regions
-  - Subregions
-*/
 
 function clicked(d) {
   var x, y, k;
@@ -180,9 +191,24 @@ function clicked(d) {
       .duration(750)
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
       .style("stroke-width", 1.5 / k + "px");
+  /* TO DO
+  -Make function to adapt text elem (class="region-header") in html to equal d.properties.regions
+
+  */
 }
 
-
-
-//DATA TO INCLUDE
-//Regions: https://raw.githubusercontent.com/UCDavisLibrary/wine-ontology/master/examples/france/regions.geojson
+//NEEDS functionality for reading region with class .active, and showing appropriate text file
+//Also if .active is true, disappear on the next click
+function loadText(){ 
+    var xhr = new XMLHttpRequest;
+  xhr.open('GET', '../text/Bordeaux', true);
+  xhr.onload = function (){
+      if(document.getElementById("description").innerText.length < 1) { //if innerHTML for <p/> is lt 1, input bdx.text
+        document.getElementById("description").innerText = xhr.responseText; 
+      } else {
+        document.getElementById("description").innerText = ''
+      } 
+  };
+  xhr.send(null);
+  console.log("Text loaded")
+}

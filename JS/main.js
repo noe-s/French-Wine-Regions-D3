@@ -143,7 +143,7 @@ d3.json("../data/regions.geojson", function(error, data) {
         }
       })
       .on("click", clicked)
-      .attr("onclick","loadText()")
+      //.attr("onclick","loadText()")
       .text(function(d,i) { return labelRegion(d.properties.region); });
 
 
@@ -191,6 +191,27 @@ function clicked(d) {
       .duration(750)
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
       .style("stroke-width", 1.5 / k + "px");
+
+  if(document.getElementById("region-header").innerText.length < 1) {
+    document.getElementById("region-header").innerText = d.properties.region;
+  } else {
+    document.getElementById("region-header").innerText = '';
+  }
+
+  //console.log(d.properties)
+
+    //Select appropriate text file for wine region info.
+    var xhr = new XMLHttpRequest;
+    xhr.open('GET', '../text/' + d.properties.region, true);
+    xhr.onload = function (){
+      if(document.getElementById("description").innerText.length < 1 ) {
+        document.getElementById("description").innerText = xhr.responseText;
+      } else {
+        document.getElementById("description").innerText = ''
+      }
+    };
+    xhr.send(null);
+
   /* TO DO
   -Make function to adapt text elem (class="region-header") in html to equal d.properties.regions
 
@@ -199,16 +220,16 @@ function clicked(d) {
 
 //NEEDS functionality for reading region with class .active, and showing appropriate text file
 //Also if .active is true, disappear on the next click
-function loadText(){ 
-    var xhr = new XMLHttpRequest;
-  xhr.open('GET', '../text/Bordeaux', true);
-  xhr.onload = function (){
-      if(document.getElementById("description").innerText.length < 1) { //if innerHTML for <p/> is lt 1, input bdx.text
-        document.getElementById("description").innerText = xhr.responseText; 
-      } else {
-        document.getElementById("description").innerText = ''
-      } 
-  };
-  xhr.send(null);
-  console.log("Text loaded")
-}
+// function loadText(){ 
+//     var xhr = new XMLHttpRequest;
+//   xhr.open('GET', '../text/Bordeaux', true);
+//   xhr.onload = function (){
+//       if(document.getElementById("description").innerText.length < 1) { //if innerHTML for <p/> is lt 1, input bdx.text
+//         document.getElementById("description").innerText = xhr.responseText; 
+//       } else {
+//         document.getElementById("description").innerText = ''
+//       } 
+//   };
+//   xhr.send(null);
+//   console.log("Text loaded")
+// }
